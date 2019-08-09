@@ -1,21 +1,25 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
+import {setUser} from '../../ducks/reducer'
 
-export default class Auth extends Component {
+class Auth extends Component {
     state = {
         username: '',
         password: ''
     }
 
     registerUser() {
-        axios.post('/auth/register', {username: this.state.username, password: this.state.password}).then(() =>  {
+        axios.post('/auth/register', {username: this.state.username, password: this.state.password}).then((res) =>  {
+            this.props.setUser(res.data)
             this.props.history.push('/dashboard')
         })
         .catch(() => alert('Username already taken!'))
     }
 
     login() {
-        axios.post('/auth/login', {username: this.state.username, password: this.state.password}).then(() => {
+        axios.post('/auth/login', {username: this.state.username, password: this.state.password}).then(res => {
+            this.props.setUser(res.data)
             this.props.history.push('/dashboard')
         })
         .catch(() => alert('Username or Password Incorrect'))
@@ -36,3 +40,5 @@ export default class Auth extends Component {
         )
     }
 }
+
+export default connect(null, {setUser})(Auth)

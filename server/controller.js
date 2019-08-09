@@ -27,7 +27,6 @@ module.exports = {
         if (user.length === 0) {
             return res.status(400).send('Username not found')
         }
-
         if (user[0].password !== password) {
             return res.status(401).send('Incorrect password')
         }

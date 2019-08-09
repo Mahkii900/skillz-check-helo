@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 
 class Nav extends Component {
     render() {
-        console.log(this.props)
         return(
             <div>
                 <div className='buttons-box'>
@@ -28,8 +27,8 @@ class Nav extends Component {
 }
 
 function mapStateToProps(reduxState) {
-    const {username, password} = reduxState
-    return {username, password}
+    const {username, profile_pic} = reduxState
+    return {username, profile_pic}
 }
 
 export default connect(mapStateToProps)(Nav)
