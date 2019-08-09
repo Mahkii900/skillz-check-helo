@@ -35,6 +35,7 @@ module.exports = {
         res.status(200).send(user_obj)
     },
 
+    //-------TEST OUT THIS ENDPOINT FIRST---------
     getAllPosts: async (req, res) => {
         const db = req.app.get('db')
         const {id} = req.params
@@ -42,8 +43,7 @@ module.exports = {
 
         if (userposts){
             if (search.length > 0) {
-                //searching by title
-                let searchStr = '%' + search + '%'
+                let searchStr = '%' + decodeURI(search) + '%'
                 const posts = await db.search_posts_by_title([searchStr])
                 res.status(200).send(posts)
             } else {
@@ -51,7 +51,7 @@ module.exports = {
                 res.status(200).send(posts)
             }
         } else {
-            let searchStr = '%' + search + '%'
+            let searchStr = '%' + decodeURI(search) + '%'
             const posts = await db.search_posts_by_title_userless([searchStr, id])
             res.status(200).send(posts)
         }
