@@ -8,7 +8,8 @@ const app = express()
 
 app.use(express.json())
 
-app.post('/auth/register', ctrl.registerUser)
+app.post('/auth/register', ctrl.registerUser) //registers user
+app.post('/auth/login', ctrl.login) //logs in a user
 
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db)
