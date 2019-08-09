@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
-export default class Nav extends Component {
+class Nav extends Component {
     render() {
+        console.log(this.props)
         return(
             <div>
                 <div className='buttons-box'>
@@ -16,7 +18,18 @@ export default class Nav extends Component {
                         <button>Logout</button>
                     </Link>
                 </div>
+                <div className='user-info-box'>
+                    <div>User: {this.props.username}</div>
+                    <div>Pic: {this.props.profile_pic}</div>
+                </div>
             </div>
         )
     }
 }
+
+function mapStateToProps(reduxState) {
+    const {username, password} = reduxState
+    return {username, password}
+}
+
+export default connect(mapStateToProps)(Nav)
