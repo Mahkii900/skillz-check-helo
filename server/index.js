@@ -10,6 +10,7 @@ app.use(express.json())
 
 app.post('/auth/register', ctrl.registerUser) //registers user
 app.post('/auth/login', ctrl.login) //logs in a user
+app.get('/posts/:id', ctrl.getAllPosts) //gets all posts
 
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db)
