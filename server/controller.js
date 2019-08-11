@@ -64,6 +64,8 @@ module.exports = {
         const db = req.app.get('db')
         const {postid} = req.params
 
-        
+        const post = await db.get_one_post([postid])
+        let [postObj] = post
+        res.status(200).send(postObj)
     }
 }

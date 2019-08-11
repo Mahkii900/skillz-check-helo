@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 class Dashboard extends Component {
     state = {
@@ -13,7 +14,7 @@ class Dashboard extends Component {
         const {id} = this.props
         let search = this.state.search
         search = '%' + search + '%'
-        axios.get(`/posts/${id}?userposts=${this.state.userposts}&search=%${search}%`).then(res => {
+        axios.get(`/search/${id}?userposts=${this.state.userposts}&search=%${search}%`).then(res => {
             this.setState({posts: res.data})
         })
     }
@@ -25,7 +26,7 @@ class Dashboard extends Component {
     resetSearch() {
         const {id} = this.props
         console.log(this.props)
-        axios.get(`/posts/${id}?userposts=${this.state.userposts}&search=%%`).then(res => {
+        axios.get(`/search/${id}?userposts=${this.state.userposts}&search=%%`).then(res => {
             console.log(res.data)
             this.setState({posts: res.data, search: ''})
         })
@@ -33,7 +34,7 @@ class Dashboard extends Component {
 
     render() {
         const posts = this.state.posts.map((ele) => {
-            return <div key={ele.id}>
+            return <Link to={`/post/${ele.id}`} key={ele.id}>
                 <div>
                     {ele.title}
                 </div>
@@ -43,7 +44,8 @@ class Dashboard extends Component {
                 <div>
                     {ele.profile_pic}
                 </div>
-            </div>
+
+            </Link>
                 
         })
         return (
@@ -51,7 +53,7 @@ class Dashboard extends Component {
                 <div className='search-box'>
                     <div className='search-input'>
                         <input type="text" placeholder={'Search...'} value={this.state.search} onChange={(e) => this.setState({search: e.target.value})}/>
-                        <input type='checkbox' id='Posts?' checked={this.state.userposts} onClick={() => this.setState({userposts: !this.state.userposts})}/>
+                        <input type='checkbox' id='Posts?' checked={this.state.userposts} onChange={() => this.setState({userposts: !this.state.userposts})}/>
                         <label htmlFor='Posts?'>Include my posts</label>
                     </div>
                     <div className='search-buttons'>
@@ -68,7 +70,6 @@ class Dashboard extends Component {
 }
 function mapStateToProps(reduxState) {
     const {id} = reduxState
-    console.log(id)
     return {id}
 }
 
