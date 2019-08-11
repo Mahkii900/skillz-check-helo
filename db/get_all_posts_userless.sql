@@ -1,3 +1,3 @@
 SELECT posts.id, title, img, content, username, profile_pic FROM posts
 JOIN users u ON posts.author_id = u.id
-WHERE title like $1 AND author_id != $2;
+WHERE author_id != $1;

@@ -1,10 +1,36 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import axios from 'axios';
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
     state = {
         search: '',
-        posts: [{title: 'Baa', id: 1}, {title: 'Nooo', id: 2}]
+        posts: [],
+        userposts: true
     }
+
+    getPosts() {
+        const {id} = this.props
+        let search = this.state.search
+        search = '%' + search + '%'
+        axios.get(`/posts/${id}?userposts=${this.state.userposts}&search=%${search}%`).then(res => {
+            this.setState({posts: res.data})
+        })
+    }
+
+    componentDidMount() {
+        this.getPosts()
+    }
+
+    resetSearch() {
+        const {id} = this.props
+        console.log(this.props)
+        axios.get(`/posts/${id}?userposts=${this.state.userposts}&search=%%`).then(res => {
+            console.log(res.data)
+            this.setState({posts: res.data, search: ''})
+        })
+    }
+
     render() {
         const posts = this.state.posts.map((ele) => {
             return <div key={ele.id}>
@@ -25,12 +51,12 @@ export default class Dashboard extends Component {
                 <div className='search-box'>
                     <div className='search-input'>
                         <input type="text" placeholder={'Search...'} value={this.state.search} onChange={(e) => this.setState({search: e.target.value})}/>
-                        <input type='checkbox' id='Posts?' defaultChecked/>
+                        <input type='checkbox' id='Posts?' checked={this.state.userposts} onClick={() => this.setState({userposts: !this.state.userposts})}/>
                         <label htmlFor='Posts?'>Include my posts</label>
                     </div>
                     <div className='search-buttons'>
-                        <button>Search</button>
-                        <button>Reset</button>
+                        <button onClick={() => this.getPosts()}>Search</button>
+                        <button onClick={() => this.resetSearch()}>Reset</button>
                     </div>
                 </div>
                 <div className='post-display'>
@@ -40,3 +66,10 @@ export default class Dashboard extends Component {
         )
     }
 }
+function mapStateToProps(reduxState) {
+    const {id} = reduxState
+    console.log(id)
+    return {id}
+}
+
+export default connect(mapStateToProps)(Dashboard)

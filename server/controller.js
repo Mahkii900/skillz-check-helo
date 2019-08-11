@@ -40,20 +40,30 @@ module.exports = {
         const db = req.app.get('db')
         const {id} = req.params
         const {userposts, search} = req.query
-
-        if (userposts){
-            if (search.length > 0) {
-                let searchStr = '%' + decodeURI(search) + '%'
-                const posts = await db.search_posts_by_title([searchStr])
+        
+        if (JSON.parse(userposts)){
+            if (search) {
+                const posts = await db.search_posts_by_title([search])
                 res.status(200).send(posts)
             } else {
                 const posts = await db.get_all_posts()
                 res.status(200).send(posts)
             }
         } else {
-            let searchStr = '%' + decodeURI(search) + '%'
-            const posts = await db.search_posts_by_title_userless([searchStr, id])
-            res.status(200).send(posts)
+            if (search) {
+                const posts = await db.search_posts_by_title_userless([search, id])
+                res.status(200).send(posts)
+            } else {
+                const posts = await db.get_all_posts_userless([id])
+                res.status(200).send(posts)
+            }
         }
+    },
+
+    getAPost: async (req, res) => {
+        const db = req.app.get('db')
+        const {postid} = req.params
+
+        
     }
 }
