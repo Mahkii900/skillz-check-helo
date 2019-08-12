@@ -11,9 +11,7 @@ export default class Post extends Component {
     }
 
     getPost() {
-        console.log(this.props)
         const id = JSON.parse(this.props.match.params.postid)
-        console.log(id)
         axios.get(`/posts/${id}`).then(res => {
             console.log(res.data)
             this.setState({...res.data})

@@ -67,5 +67,14 @@ module.exports = {
         const post = await db.get_one_post([postid])
         let [postObj] = post
         res.status(200).send(postObj)
+    },
+
+    createPost: async (req, res) => {
+        const db = req.app.get('db')
+        const {title, img, content} = req.body
+        const {id} =  req.params
+
+        await db.create_post([title, content, img, id])
+        res.sendStatus(200)
     }
 }
