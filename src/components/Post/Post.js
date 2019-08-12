@@ -13,7 +13,6 @@ export default class Post extends Component {
     getPost() {
         const id = JSON.parse(this.props.match.params.postid)
         axios.get(`/posts/${id}`).then(res => {
-            console.log(res.data)
             this.setState({...res.data})
         })
     }
@@ -26,7 +25,7 @@ export default class Post extends Component {
         return (
             <div>
                 <div>{this.state.title}</div>
-                <div>{this.state.img}</div>
+                <div><img src={this.state.img} alt={this.state.title}/></div>
                 <div>{this.state.content}</div>
                 <div>{this.state.username}</div>
                 <div>{this.state.profile_pic}</div>

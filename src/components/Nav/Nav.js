@@ -1,8 +1,26 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {setUser, clearState} from '../../ducks/reducer'
+import axios from 'axios'
 
 class Nav extends Component {
+    getUserInfo() {
+        axios.get('/auth/me').then(res => {
+            setUser(res.data)
+        })
+    }
+
+    componentDidMount() {
+        this.getUserInfo()
+    }
+
+    logout() {
+        axios.post('/auth/logout').then(res => {
+            clearState()
+        })
+    }
+
     render() {
         return(
             <div>
@@ -14,7 +32,7 @@ class Nav extends Component {
                         <button>New Post</button>
                     </Link>
                     <Link to={'/'}>
-                        <button>Logout</button>
+                        <button onClick={() => this.logout()}>Logout</button>
                     </Link>
                 </div>
                 <div className='user-info-box'>
@@ -31,4 +49,4 @@ function mapStateToProps(reduxState) {
     return {username, profile_pic}
 }
 
-export default connect(mapStateToProps)(Nav)
+export default connect(mapStateToProps, {setUser, clearState})(Nav)

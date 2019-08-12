@@ -12,6 +12,7 @@ module.exports = {
         const user = await db.register_user([username, password])
         if (user.length > 0) {
             let [user_obj] = user
+            req.session.userid = user_obj.id
             return res.status(201).send(user_obj)
         } else {
             return res.sendStatus(500)
@@ -32,13 +33,14 @@ module.exports = {
         }
 
         let [user_obj] = user
+        req.session.userid = user_obj.id
         res.status(200).send(user_obj)
     },
 
     //-------TEST OUT THIS ENDPOINT FIRST---------
     getAllPosts: async (req, res) => {
         const db = req.app.get('db')
-        const {id} = req.params
+        const id = req.session.userid
         const {userposts, search} = req.query
         
         if (JSON.parse(userposts)){
@@ -72,9 +74,22 @@ module.exports = {
     createPost: async (req, res) => {
         const db = req.app.get('db')
         const {title, img, content} = req.body
-        const {id} =  req.params
+        const id =  req.session.userid
 
         await db.create_post([title, content, img, id])
         res.sendStatus(200)
+    },
+
+    logout: (req, res) => {
+        req.session.destroy()
+        res.sendStatus(200)
+    },
+
+    getUserInfo: async (req, res) => {
+        const db = req.app.get('db')
+        const id = req.session.userid
+
+        const [userInfo] = await db.get_user_info([id])
+        res.status(200).send(userInfo)
     }
 }

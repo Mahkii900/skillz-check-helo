@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
 
-class Dashboard extends Component {
+export default class Dashboard extends Component {
     state = {
         search: '',
         posts: [],
@@ -11,10 +10,9 @@ class Dashboard extends Component {
     }
 
     getPosts() {
-        const {id} = this.props
         let search = this.state.search
         search = '%' + search + '%'
-        axios.get(`/search/${id}?userposts=${this.state.userposts}&search=%${search}%`).then(res => {
+        axios.get(`/search?userposts=${this.state.userposts}&search=%${search}%`).then(res => {
             this.setState({posts: res.data})
         })
     }
@@ -24,9 +22,8 @@ class Dashboard extends Component {
     }
 
     resetSearch() {
-        const {id} = this.props
         console.log(this.props)
-        axios.get(`/search/${id}?userposts=${this.state.userposts}&search=%%`).then(res => {
+        axios.get(`/search?userposts=${this.state.userposts}&search=%%`).then(res => {
             console.log(res.data)
             this.setState({posts: res.data, search: ''})
         })
@@ -68,9 +65,3 @@ class Dashboard extends Component {
         )
     }
 }
-function mapStateToProps(reduxState) {
-    const {id} = reduxState
-    return {id}
-}
-
-export default connect(mapStateToProps)(Dashboard)
